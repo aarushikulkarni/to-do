@@ -24,6 +24,11 @@ body {
   font-weight: 700;
 }
 
+.content h2 {
+  font-size: 2rem;
+  font-weight: 400;
+}
+
 .content p {
   font-size: 1.2rem;
   font-weight: 400;
@@ -85,4 +90,5 @@ body {
 .input-box,
 .login-button {
   width: 100%;
+  box-sizing: border-box;
 }

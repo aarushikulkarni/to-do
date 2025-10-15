@@ -14,8 +14,8 @@ const LoginPage = ({ onLogin }) => {
 
     return (
         <div className="content">
-            <h1 className="app-title">Get Productive!</h1>
-            <form className = "LoginForm" onSubmit = {handleSubmit}>
+            <h1 className="app-title">Easy To-Do List</h1>
+            <form className = "login-form" onSubmit = {handleSubmit}>
                 <h2>Login</h2>
                 <input
                     className="input-box"
@@ -31,7 +31,7 @@ const LoginPage = ({ onLogin }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className="login-button" type="submit">Login</button>
+                <button className="login-button" type="submit">Submit</button>
             </form>
         </div>
         
