@@ -23,16 +23,19 @@ const ToDoPage = ({ onLogin }) => {
     };
 
     return (
-        <div className="content">
+       <div className="content">
             <h2> My To-Do List</h2>
-            <div className="todo-form">
+            <form className="todo-form" onSubmit={(e) => {
+                    e.preventDefault();
+                    addTodo();
+                }}>
             <input className = "add-todo"
                 type = "text"
                 value = {input}
                 onChange = {(e) => setInput(e.target.value)}
             />
             <button className="add-button" onClick={addTodo}>Add</button>
-            </div>
+            </form>
             <div className="todo-list">
             <ul>
                 {todos.map((todo, idx) => (
@@ -46,7 +49,7 @@ const ToDoPage = ({ onLogin }) => {
                     </li>
                 ))}
             </ul>
-            </div>
+            </div> 
         </div>
     );
 };
