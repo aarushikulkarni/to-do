@@ -25,12 +25,15 @@ const ToDoPage = ({ onLogin }) => {
     return (
         <div className="content">
             <h2> My To-Do List</h2>
+            <div className="todo-form">
             <input className = "add-todo"
                 type = "text"
                 value = {input}
                 onChange = {(e) => setInput(e.target.value)}
             />
             <button className="add-button" onClick={addTodo}>Add</button>
+            </div>
+            <div className="todo-list">
             <ul>
                 {todos.map((todo, idx) => (
                     <li key={idx}>
@@ -39,10 +42,11 @@ const ToDoPage = ({ onLogin }) => {
                             style={{ textDecoration: todo.completed ? "line-through" : ""}}
                         > {todo.text}
                         </span>
-                        <button onClick={() => deleteTodo(idx)}>Delete</button>
+                        <button className="delete-button" onClick={() => deleteTodo(idx)}>Delete</button>
                     </li>
                 ))}
             </ul>
+            </div>
         </div>
     );
 };
