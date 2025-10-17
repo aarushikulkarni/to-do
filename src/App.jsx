@@ -1,5 +1,6 @@
 import { useState } from "react"
 import LoginPage from "./LoginPage.jsx"
+import ToDoPage from "./ToDoPage.jsx"
 import './App.css';
 
 const App = () => {
@@ -7,7 +8,11 @@ const App = () => {
 
   return (
     <div>
-      <LoginPage onLogin={() => setLoggedIn(true)}/>
+      {loggedIn ? (
+        <ToDoPage />
+      ) : (
+        <LoginPage onLogin={() => setLoggedIn(true)}/>
+      )}
     </div>
   );
 };
