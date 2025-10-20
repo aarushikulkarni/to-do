@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ToDoPage = ({ onLogin }) => {
+const ToDoPage = ({ }) => {
     const[todos, setTodos] = useState([]);
     const[input, setInput] = useState("");
 
