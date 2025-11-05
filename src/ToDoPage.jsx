@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ToDoPage = ({ }) => {
+const ToDoPage = ({ switchToLogin }) => {
     const[todos, setTodos] = useState([]);
     const[input, setInput] = useState("");
 
@@ -22,9 +22,16 @@ const ToDoPage = ({ }) => {
         setTodos(newTodos);
     };
 
+    const handleSignout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem("token");
+        switchToLogin()
+    }
+
     return (
        <div className="content">
             <h2> My To-Do List</h2>
+            <a className="signout-link" href="#" onClick={handleSignout}>Sign out</a>
             <form className="todo-form" onSubmit={(e) => {
                     e.preventDefault();
                     addTodo();

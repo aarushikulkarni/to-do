@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const router = express.Router()
 
-const createToken = ({ user }) => {
+const createToken = (user) => {
     return jwt.sign(
         { id: user.id, username: user.username },
         process.env.JWT_SECRET,
@@ -14,19 +14,9 @@ const createToken = ({ user }) => {
     );
 };
 
-const authenticateToken = ( {req, res, next}) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-    if (!token) return res.sendStatus(401);
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-}
 
 router.post('/signup', async (req, res) => {
+    console.log(req.body);
     const { name, username, password } = req.body;
 
     if (!username || !password)
@@ -35,7 +25,7 @@ router.post('/signup', async (req, res) => {
     try {
         const hashed = await bcrypt.hash(password, 10);
 
-        const newUser = await User.create( { name, username, password: hashed});
+        const newUser = await User.create( { name, username: username.toLowerCase().trim() , password: hashed});
 
         const token = createToken(newUser);
 
@@ -46,6 +36,7 @@ router.post('/signup', async (req, res) => {
         });
     } 
     catch (err) {
+        console.log(err)
         res.status(400).json({ error: 'Username already exists'})
     }
 });
@@ -56,12 +47,11 @@ router.post('/login', async (req, res) => {
     if (!username || !password) 
         return res.status(400).json( { error: 'Missing username or password'});
 
-    const user = await User.findOne({ where: { username }});
+    const user = await User.findOne({ where: { username: username.toLowerCase().trim() }});
     if (!user)
         return res.status(400).json( { error: 'Username does not exist' })
 
-    const hashed = await bcrypt.hash(password, 10);
-    const pass = hashed.localeCompare(user.password);
+    const pass = await bcrypt.compare(password, user.password)
     if (!pass)
         return res.status(400).json( {error: 'Invalid password'})
 
@@ -73,5 +63,4 @@ router.post('/login', async (req, res) => {
     })
 })
 
-module.exports(router)
-module.exports = { authenticateToken }
+module.exports = router

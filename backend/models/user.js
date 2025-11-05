@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
 const path = require('path');
 
 const sequelize = new Sequelize({
@@ -8,27 +8,27 @@ const sequelize = new Sequelize({
 
 const User = sequelize.define('User', {
     name: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
     },
     username: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         unique: true,
         allowNull: false,
     },
     password: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
     }
 });
 
 const Todo = sequelize.define('Todo', {
     text: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     completed: {
-        type: DataTypes.BOOLEAN,
+        type: Sequelize.BOOLEAN,
         defaultValue: false
     }
 });

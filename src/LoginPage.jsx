@@ -3,6 +3,7 @@ import { useState } from "react";
 const LoginPage = ({ onLogin, switchToSignup }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -10,9 +11,11 @@ const LoginPage = ({ onLogin, switchToSignup }) => {
         if (!username || !password) return
 
         try {
-            const response = await fetch("http://localhost:5000/auth/login", {
+            const response = await fetch("http://localhost:5050/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
+                headers: { 
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify( {username, password })
             })
 
@@ -23,7 +26,8 @@ const LoginPage = ({ onLogin, switchToSignup }) => {
                 onLogin()
             }
             else {
-                alert(data.error)
+                setError(data.error || 'Signup failed');
+                return
             }
         }
         catch (err) {
@@ -51,6 +55,9 @@ const LoginPage = ({ onLogin, switchToSignup }) => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button className="login-button" type="submit">Submit</button>
+
+                {error && <p className="error-message">{error}</p>}
+
                 <p>Or if don't have an account</p>
                 <a href="#" onClick={switchToSignup}>sign up</a>
             </form>

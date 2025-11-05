@@ -177,3 +177,18 @@ body {
 .add-button {
   flex: 1;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.signout-link {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}

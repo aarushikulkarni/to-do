@@ -10,7 +10,7 @@ const App = () => {
 
   if (loggedIn) {
     return (
-      <ToDoPage />
+      <ToDoPage switchToLogin={()=>setLoggedIn(false)}/>
     )
   }
 
