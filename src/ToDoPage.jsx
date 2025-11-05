@@ -1,25 +1,93 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ToDoPage = ({ switchToLogin }) => {
     const[todos, setTodos] = useState([]);
     const[input, setInput] = useState("");
 
-    const addTodo = () => {
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        const fetchTodos = async () => {
+            try {
+                const res = await fetch("http://localhost:5050/todo", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+                const data = await res.json();
+                if (res.ok) setTodos(data);
+                else console.error(data.error);
+            }
+            catch (err) {
+                console.error("Failed to fetch todos", err);
+            }
+        };
+
+        fetchTodos();
+    }, [token]);
+
+    const addTodo = async () => {
         if (input.trim() === "") return;
-        setTodos([...todos, { text: input, completed: false }]);
-        setInput("");
+        try {
+            const res = await fetch("http://localhost:5050/todo", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify( { text: input, completed: false }),
+            });
+
+            const newTodo = await res.json();
+            if (res.ok) {
+                setTodos([...todos, newTodo]);
+                setInput("");
+            }
+            else {
+                console.error(newTodo.error);
+            }
+        }
+        catch (err) {
+            console.error("Error adding todo", err);
+        }
     };
 
-    const toggleTodo = (index) => {
-        const newTodos = [...todos];
-        newTodos[index].completed = !newTodos[index].completed;
-        setTodos(newTodos);
+    const toggleTodo = async (id, currentCompleted) => {
+        try {
+            const res = await fetch(`http://localhost:5050/todo/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ completed: !currentCompleted }),
+            });
+            const updatedTodo = await res.json();
+            if (res.ok) {
+                setTodos(todos.map((t)=> (t.id === id ? updatedTodo : t)));
+            }
+        }
+        catch (err) {
+            console.error("Error toggling todo", err);
+        }
     };
 
-    const deleteTodo = (index) => {
-        const newTodos = [...todos];
-        newTodos.splice(index, 1);
-        setTodos(newTodos);
+    const deleteTodo = async (id) => {
+        try {
+            const res = await fetch(`http://localhost:5050/todo/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (res.ok) {
+                setTodos(todos.filter((t) => t.id !== id));
+            }
+        }
+        catch (err) {
+            console.error("Error deleting todo", err);
+        }
     };
 
     const handleSignout = (e) => {
@@ -41,18 +109,18 @@ const ToDoPage = ({ switchToLogin }) => {
                 value = {input}
                 onChange = {(e) => setInput(e.target.value)}
             />
-            <button className="add-button" onClick={addTodo}>Add</button>
+            <button className="add-button" >Add</button>
             </form>
             <div className="todo-list">
             <ul>
-                {todos.map((todo, idx) => (
-                    <li key={idx}>
+                {todos.map((todo) => (
+                    <li key={todo.id}>
                         <span
-                            onClick={() => toggleTodo(idx)}
+                            onClick={() => toggleTodo(todo.id, todo.completed)}
                             style={{ textDecoration: todo.completed ? "line-through" : ""}}
                         > {todo.text}
                         </span>
-                        <button className="delete-button" onClick={() => deleteTodo(idx)}>Delete</button>
+                        <button className="delete-button" onClick={() => deleteTodo(todo.id)}>x</button>
                     </li>
                 ))}
             </ul>
