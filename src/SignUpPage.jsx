@@ -4,6 +4,7 @@ const SignupPage = ({ onLogin, switchToLogin}) => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -11,10 +12,12 @@ const SignupPage = ({ onLogin, switchToLogin}) => {
         if (!username || !password) return
 
         try {
-            const response = await fetch("http://localhost:5000/auth/signup", {
+            const response = await fetch("http://localhost:5050/auth/signup", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify( {username, password })
+                headers: { 
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify( {name, username, password })
             })
 
             const data = await response.json()
@@ -24,7 +27,8 @@ const SignupPage = ({ onLogin, switchToLogin}) => {
                 onLogin()
             }
             else {
-                alert(data.error)
+                setError(data.error || "Signup failed")
+                return
             }
         }
         catch (err) {
@@ -59,6 +63,7 @@ const SignupPage = ({ onLogin, switchToLogin}) => {
                     onChange={(e) => setPassword(e.target.value)}/>
                 <button className="login-button" type="submit">Submit</button>
                 <p>Or if already signed up</p>
+                {error && <p className="error-message">{error}</p>}
                 <a href="#" onClick={switchToLogin}>log in</a>
             </form>
         </div>
