@@ -23,6 +23,11 @@ const User = sequelize.define('User', {
 });
 
 const Todo = sequelize.define('Todo', {
+    id : {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     text: {
         type: Sequelize.STRING,
         allowNull: false,

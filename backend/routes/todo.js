@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.post("/", authenticateToken, async (req, res) => {
     try {
-        const { title, completed } = req.body
+        const { text, completed } = req.body
         const todo = await Todo.create( {
-            title,
+            text,
             completed: completed || false,
             UserId: req.user.id,
         });
@@ -34,12 +34,12 @@ router.get("/", authenticateToken, async (req, res) => {
 
 router.put("/:id", authenticateToken, async (req, res) => {
     try {
-        const { title, completed } = req.body;
+        const { text, completed } = req.body;
         const todo = await Todo.findOne({
             where: { id: req.params.id, UserId: req.user.id },
         });
         if (!todo) return res.status(404).json( { message: "Todo not found" })
-        todo.title = title ?? todo.title;
+        todo.text = text ?? todo.text;
         todo.completed = completed ?? todo.completed;
         await todo.save();
         res.json(todo);
