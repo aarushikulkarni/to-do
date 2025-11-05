@@ -38,7 +38,7 @@ const SignupPage = ({ onLogin, switchToLogin}) => {
 
     return (
         <div className="content">
-            <h1 className="app-title">Easy To-Do List</h1>
+            <h1 className="app-title">To-Do Tracker</h1>
             <form className="login-form" onSubmit={handleSubmit}>
                 <h2>Sign Up</h2>
                 <input

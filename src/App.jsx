@@ -6,7 +6,7 @@ import './App.css';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isSignup, setIsSignup] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
 
   if (loggedIn) {
     return (
@@ -16,15 +16,15 @@ const App = () => {
 
   return (
     <div>
-      {isSignup ? (
-        <SignupPage
-          onLogin={() => setLoggedIn(true)}
-          switchToLogin={() => setIsSignup(false)} 
-        />
-      ) : (
+      {isLogin ? (
         <LoginPage
           onLogin={() => setLoggedIn(true)}
-          switchToSignup={() => setIsSignup(true)}
+          switchToSignup={() => setIsLogin(false)}
+        />
+      ) : (
+        <SignupPage
+          onLogin={() => setLoggedIn(true)}
+          switchToLogin={() => setIsLogin(true)} 
         />
       )}
     </div>
